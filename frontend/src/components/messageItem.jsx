@@ -18,7 +18,8 @@ export function MessageItem({ msg, isMe }) {
 
                 <div className="flex items-center justify-end gap-1 mt-1 min-h-[14px]">
                     <span className="text-[9px] opacity-60 font-medium">
-                        {new Date(msg.timestamp || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        {new Date(msg.timestamp?.$date || msg.timestamp || parseInt(msg.id) || Date.now())
+                            .toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
 
                     {/* Кошачий глаз как индикатор прочтения (только для твоих сообщений) */}

@@ -45,7 +45,10 @@ io.on('connection', (socket) => {
 
         const history = await Message.find({ room: roomId }).sort({ timestamp: 1 }).limit(50);
 
+
         console.log(`📚 Найдено в базе для ${roomId}: ${history.length} сообщений`);
+
+        socket.emit('load_history', history);
 
         console.log(`📦 Кот ${socket.id} запрыгнул в коробку: ${roomId}`);
     });
