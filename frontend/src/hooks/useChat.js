@@ -8,41 +8,51 @@ export const useChat = (roomId, username) => {
     useEffect(() => {
         socket.connect();
 
-        socket.on('connect', () => {
-            setIsConnected(true);
-            socket.emit('join_room', roomId);
-        });
-
-        socket.on('disconnect', () => setIsConnected(false));
-
-        // Загрузка истории из базы
-        socket.on('load_history', (history) => {
-            console.log("📥 Фронтенд получил историю:", history);
+        // 1. Сначала вешаем ВСЕ слушатели
+        const onHistory = (history) => {
+            console.log("📚 История из базы пришла:", history);
             setMessages(history.map(msg => ({
                 ...msg,
-                isMe: msg.user === username
+                id: msg.id || msg._id,
+                isMe: msg.user === username // Тут должно быть совпадение имен!
             })));
-        });
+        };
 
-        socket.on('meow_message', (data) => {
+
+
+        const onMeow = (data) => {
             if (data.user === username) return;
             setMessages(prev => {
                 if (prev.find(m => m.id === data.id)) return prev;
                 return [...prev, data];
             });
+        };
+
+        const onUpdateSeen = ({ msgId }) => {
+            setMessages(prev => prev.map(m => (m.id === msgId || m._id === msgId) ? { ...m, seen: true } : m));
+        };
+
+        socket.on('load_history', onHistory);
+        socket.on('meow_message', onMeow);
+        socket.on('update_seen', onUpdateSeen);
+
+        // 2. И только когда "уши" готовы — заходим в комнату
+        socket.on('connect', () => {
+            setIsConnected(true);
+            console.log("✅ Сокет подключен, запрашиваю комнату:", roomId);
+            socket.emit('join_room', roomId);
         });
 
-        socket.on('update_seen', ({ msgId }) => {
-            setMessages(prev => prev.map(m => m.id === msgId ? { ...m, seen: true } : m));
-        });
+        socket.on('disconnect', () => setIsConnected(false));
 
         return () => {
-            socket.off('meow_message');
-            socket.off('load_history');
-            socket.off('update_seen');
+            socket.off('load_history', onHistory);
+            socket.off('meow_message', onMeow);
+            socket.off('update_seen', onUpdateSeen);
             socket.off('connect');
         };
-    }, [roomId, username]);
+    }, [roomId, username]); // Эти зависимости КРИТИЧНЫ
+
 
     const sendMessage = (text) => {
         const msgData = {
@@ -57,5 +67,9 @@ export const useChat = (roomId, username) => {
         setMessages(prev => [...prev, { ...msgData, isMe: true }]);
     };
 
-    return { messages, sendMessage, isConnected, setMessages };
+    const markSeen = (msgId) => {
+        socket.emit('message_seen', { room: roomId, msgId });
+    };
+
+    return { messages, sendMessage, isConnected, setMessages, markSeen };
 };

@@ -19,7 +19,7 @@ const ChatPage = () => {
     const username = sessionStorage.getItem('cat-name') || 'Анонимный кот';
     const scrollRef = useRef(null);
 
-    const { messages, sendMessage, isConnected } = useChat(roomId, username);
+    const { messages, sendMessage, isConnected, markSeen } = useChat(roomId, username);
 
     // Если ника нет (зашли по прямой ссылке) — кидаем на логин
     useEffect(() => {
@@ -37,7 +37,7 @@ const ChatPage = () => {
             if (messages.length > 0) {
                 const lastMsg = messages[messages.length - 1];
                 if (lastMsg.user !== username && !lastMsg.seen && document.hasFocus()) {
-                    socket.emit('message_seen', { room: roomId, msgId: lastMsg.id });
+                    markSeen(lastMsg.id || lastMsg._id);
                 }
             }
         };
@@ -120,6 +120,17 @@ const ChatPage = () => {
                     {isPurring ? '💤 Purrr' : '🐾 MYAW'}
                 </button>
             </header>
+            {/* Индикатор статуса сервера */}
+            <div className={`overflow-hidden transition-all duration-500 ease-in-out ${!isConnected ? 'max-h-10 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
+                }`}>
+                <div className="bg-catOrange/20 border-b border-white/5 py-1.5 flex items-center justify-center gap-2">
+                    {/* Крутящаяся иконка лапки или просто точка */}
+                    <div className="w-2 h-2 bg-catOrange rounded-full animate-ping"></div>
+                    <span className="text-[10px] font-bold text-catOrange uppercase tracking-widest">
+                        Кот просыпается... (подключение к серверу)
+                    </span>
+                </div>
+            </div>
 
 
             {/* Список сообщений */}
