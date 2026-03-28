@@ -1,4 +1,6 @@
 require('dotenv').config();
+console.log('🔗 Проверка URL базы:', process.env.MONGO_URL ? 'Найдено!' : 'ПУСТО ❌');
+
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
