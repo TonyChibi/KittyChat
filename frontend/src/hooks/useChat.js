@@ -6,7 +6,7 @@ export const useChat = (roomId, username) => {
     const [isConnected, setIsConnected] = useState(false);
 
     useEffect(() => {
-        socket.connect();
+
 
         // 1. Сначала вешаем ВСЕ слушатели
         const onHistory = (history) => {
@@ -37,6 +37,8 @@ export const useChat = (roomId, username) => {
         socket.on('update_seen', onUpdateSeen);
 
         // 2. И только когда "уши" готовы — заходим в комнату
+        socket.connect();
+
         socket.on('connect', () => {
             setIsConnected(true);
             console.log("✅ Сокет подключен, запрашиваю комнату:", roomId);
