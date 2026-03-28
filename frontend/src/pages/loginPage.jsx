@@ -44,7 +44,7 @@ const LoginPage = () => {
                         <CatFace className="absolute left-3 top-3.5 text-gray-500" size={20} />
                         <input
                             type="text"
-                            placeholder="Твой кошачий ник"
+                            placeholder="Your pet name"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             className="w-full py-3 pl-10 pr-4 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:ring-2 focus:ring-catOrange text-white placeholder-gray-500 transition-all"
@@ -56,7 +56,7 @@ const LoginPage = () => {
                         <span className="absolute left-3 top-3.5 text-gray-500 text-xl font-bold">#</span>
                         <input
                             type="text"
-                            placeholder="ID комнаты (UID)"
+                            placeholder="room ID (UID)"
                             value={roomId}
                             onChange={(e) => setRoomId(e.target.value)}
                             className="w-full py-3 pl-10 pr-4 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:ring-2 focus:ring-catOrange text-white placeholder-gray-500 transition-all"
