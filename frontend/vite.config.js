@@ -9,17 +9,24 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      display: 'standalone',
+      includeAssets: ['pawIcon.png', 'robots.txt', 'apple-touch-icon.png'],
       manifest: {
         name: 'Cat Messenger',
-        short_name: 'CatChat',
-        description: 'Мессенджер с лапками и мяуканьем',
+        short_name: 'KittyChat',
+        description: 'Мессенджер с лапками',
         theme_color: '#1a1a1a', // Темная тема
         icons: [
           {
-            src: './src/assets/pawIcon.png',
+            src: '/pawIcon.png',
             sizes: '512x512',
             type: 'image/png',
-            purpose: 'maskable'
+            purpose: 'any maskable'
+          },
+          {
+            src: '/pawIcon192.png',
+            sizes: '192x192',
+            type: 'image/png'
           }
         ]
       }
