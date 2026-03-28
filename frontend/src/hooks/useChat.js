@@ -17,6 +17,7 @@ export const useChat = (roomId, username) => {
 
         // Загрузка истории из базы
         socket.on('load_history', (history) => {
+            console.log("📥 Фронтенд получил историю:", history);
             setMessages(history.map(msg => ({
                 ...msg,
                 isMe: msg.user === username
