@@ -1,0 +1,9 @@
+@import "tailwindcss";
+/* Это база для v4 */
+
+@layer base {
+  body {
+    @apply bg-[#1a1a1a] text-white m-0;
+    font-family: sans-serif;
+  }
+}
