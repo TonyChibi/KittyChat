@@ -1,9 +1,29 @@
+require('dotenv').config();
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
+const mongoose = require('mongoose')
+
 
 const app = express();
 const server = http.createServer(app);
+
+
+
+mongoose.connect(process.env.MONGO_URL)
+    .then(() => console.log('🍃 База котов подключена'))
+    .catch(err => console.error('Ошибка базы:', err));
+
+const MessageSchema = new mongoose.Schema({
+    room: String,
+    user: String,
+    text: String,
+    seen: { type: Boolean, default: false },
+    id: String, // Наш Date.now()
+    timestamp: { type: Date, default: Date.now }
+});
+
+const Message = mongoose.model('Message', MessageSchema);
 
 const io = new Server(server, {
     cors: {
@@ -17,15 +37,21 @@ io.on('connection', (socket) => {
     console.log('🐾 Новый кот приземлился! ID:', socket.id);
 
     // 1. Слушаем запрос на вход в конкретную комнату (по UID)
-    socket.on('join_room', (roomId) => {
+    socket.on('join_room', async (roomId) => {
         socket.leaveAll(); // Уходим из старых комнат, если были
         socket.join(roomId);
+
+        const history = await Message.find({ room: roomId }).sort({ timestamp: 1 }).limit(50);
+
         console.log(`📦 Кот ${socket.id} запрыгнул в коробку: ${roomId}`);
     });
 
     // 2. Слушаем сообщения и отправляем их ТОЛЬКО в нужную комнату
-    socket.on('meow_message', (data) => {
+    socket.on('meow_message', async (data) => {
         console.log('📩 Получено Мяу в комнату', data.room, ':', data.text);
+
+        const newMsg = new Message(data);
+        await newMsg.save()
 
         // .to(data.room) — магия сокетов: отправляем только тем, кто в этой комнате
         io.to(data.room).emit('meow_message', {
@@ -33,9 +59,11 @@ io.on('connection', (socket) => {
         });
     });
 
-    socket.on('message_seen', ({ room, msgId }) => {
+    socket.on('message_seen', async ({ room, msgId }) => {
         // Рассылаем всем в комнате сигнал, что сообщение msgId прочитано
         console.log(`👁️ Сообщение ${msgId} прочитано в ${room}`);
+        await Message.findOneAndUpdate({ id: msgId }, { seen: true });
+
         io.to(room).emit('update_seen', { msgId });
     });
 
