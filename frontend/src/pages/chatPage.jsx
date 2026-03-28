@@ -166,40 +166,30 @@ const ChatPage = () => {
     return (
         <div className="flex flex-col h-screen max-w-2xl mx-auto bg-catDark text-white shadow-2xl overflow-hidden">
             {/* Шапка с Живым Глазом */}
-            <header className="flex items-center justify-between p-4 border-b border-white/10 bg-white/5 backdrop-blur-md">
-                <div className="flex items-center gap-4">
-                    <button onClick={() => navigate('/')} className="text-gray-400 hover:text-white">←</button>
 
+            <header className="flex items-center justify-between p-3 border-b border-white/10 bg-white/5 backdrop-blur-md sticky top-0 z-50">
+                <div className="flex items-center gap-2 overflow-hidden">
+                    <button onClick={() => navigate('/')} className="text-gray-400 hover:text-white p-1">←</button>
 
-                    <CatEye
-                        lidOpen={eyeProps.lid}
-                        pupilNarrow={eyeProps.narrow}
-                        isReading={eyeProps.glow}
-                        className="w-20 h-auto"
-                    />
-                    <div onClick={shareRoom} className="cursor-pointer group">
-                        <h1 className="font-bold text-catOrange flex items-center gap-2 group-hover:text-orange-400">
-                            #{roomId}
-                            <span className="text-[10px] bg-white/10 px-2 py-0.5 rounded-full opacity-50 group-hover:opacity-100">🔗 Share</span>
+                    <div onClick={shareRoom} className="cursor-pointer group leading-tight truncate">
+                        <h1 className="font-bold text-catOrange text-sm flex items-center gap-1 group-hover:text-orange-400">
+                            #{roomId.slice(0, 8)}... {/* Сокращаем длинный ID для мобилок */}
+                            <span className="text-[9px] bg-white/10 px-1.5 py-0.5 rounded-full opacity-60">🔗copy link</span>
                         </h1>
-                        <p className="text-[10px] text-gray-500 uppercase">Мурчащий чат</p>
-                    </div>
-
-                    <div>
-                        <h1 className="font-bold text-catOrange">#{roomId}</h1>
-                        <p className="text-[10px] text-gray-500 uppercase">Мурчащий чат</p>
+                        <p className="text-[9px] text-gray-500 uppercase tracking-tighter">KittyChat </p>
                     </div>
                 </div>
 
-
-
+                {/* Кнопка режима теперь компактнее и не ломает верстку */}
                 <button
                     onClick={handleTogglePurr}
-                    className={`p-3 rounded-2xl transition-all ${isPurring ? 'bg-catOrange text-white shadow-lg' : 'bg-white/10 text-gray-400'}`}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all whitespace-nowrap ${isPurring ? 'bg-catOrange text-white shadow-md' : 'bg-white/5 text-gray-400'
+                        }`}
                 >
-                    {isPurring ? '🐾 Мурчит' : '💤 Тихо'}
+                    {isPurring ? '💤 Purrr' : '🐾 MYAW'}
                 </button>
             </header>
+
 
             {/* Список сообщений */}
             <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 scroll-smooth scroll-bar">

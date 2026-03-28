@@ -38,7 +38,7 @@ const MessageInput = ({ onSendMessage }) => {
                 value={text}
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}
-                placeholder="Напиши что-нибудь мяу..."
+                placeholder="Say meow..."
                 className="flex-1 bg-white/5 text-white rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-catOrange resize-none max-h-40 overflow-y-auto transition-all"
             />
 

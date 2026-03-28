@@ -35,8 +35,8 @@ const LoginPage = () => {
                     <CatPaw size={64} strokeWidth={1.5} className="animate-bounce" />
                 </div>
 
-                <h1 className="mb-8 text-3xl font-black text-center text-white">
-                    Cat <span className="text-catOrange">Messenger</span>
+                <h1 className="mb-8 text-3xl font-black text-center text-white text-catOrange">
+                    KittyChat
                 </h1>
 
                 <form onSubmit={handleJoin} className="space-y-6">
