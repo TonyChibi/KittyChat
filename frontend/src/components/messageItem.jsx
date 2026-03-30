@@ -14,7 +14,7 @@ export function MessageItem({ msg, isMe }) {
                     </span>
                 )}
 
-                <p className="text-sm md:text-base break-words">{msg.text}</p>
+                <p className="text-sm md:text-base break-words whitespace-pre-wrap">{msg.text}</p>
 
                 <div className="flex items-center justify-end gap-1 mt-1 min-h-[14px]">
                     <span className="text-[9px] opacity-60 font-medium">
