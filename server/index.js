@@ -20,6 +20,12 @@ const MessageSchema = new mongoose.Schema({
     room: String,
     user: String,
     text: String,
+    mediaUrl: String,
+    mediaType: {
+        type: String,
+        enum: ['image', 'video', null], // Разрешаем только эти значения
+        default: null
+    },
     seen: { type: Boolean, default: false },
     id: String, // Наш Date.now()
     timestamp: { type: Date, default: Date.now }

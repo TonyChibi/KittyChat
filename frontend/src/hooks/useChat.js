@@ -56,18 +56,36 @@ export const useChat = (roomId, username) => {
     }, [roomId, username]); // Эти зависимости КРИТИЧНЫ
 
 
-    const sendMessage = (text) => {
+    const sendMessage = (messageData) => {
+        // Проверка: если пришла не «коробка» (объект), ругаемся в консоль
+        if (typeof messageData !== 'object' || messageData === null) {
+            // 2. Генерируем стек вызовов, чтобы найти "виновника"
+            const stack = new Error().stack;
+
+            console.error(
+                "❌ ОШИБКА: sendMessage ожидает объект, но прилетела СТРОКА!",
+                "\nДанные:", messageData,
+                "\nТип:", typeof messageData,
+                "\nГде это случилось (Стек вызовов):\n", stack
+            );
+            return;
+        }
+
         const msgData = {
             id: Date.now().toString(),
             room: roomId,
             user: username,
-            text,
+            text: messageData.text || "",
+            mediaUrl: messageData.mediaUrl || null,
+            mediaType: messageData.mediaType || null,
             timestamp: new Date().toISOString(),
             seen: false
         };
+
         socket.emit('meow_message', msgData);
         setMessages(prev => [...prev, { ...msgData, isMe: true }]);
     };
+
 
     const markSeen = (msgId) => {
         socket.emit('message_seen', { room: roomId, msgId });

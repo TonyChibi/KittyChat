@@ -8,14 +8,33 @@ export function MessageItem({ msg, isMe }) {
                 : 'bg-pink-500/20 text-pink-100 border border-pink-500/30 rounded-tl-none'
                 }`}>
 
+                {/* 1. Имя пользователя (для чужих) */}
                 {!isMe && (
                     <span className="block text-[10px] font-bold mb-1 uppercase tracking-wider text-pink-300">
                         {msg.user}
                     </span>
                 )}
 
-                <p className="text-sm md:text-base break-words whitespace-pre-wrap">{msg.text}</p>
+                {/* 2. МЕДИА (Если есть ссылка) */}
+                {msg.mediaUrl && (
+                    <div className="mb-2 rounded-lg overflow-hidden border border-white/10">
+                        {msg.mediaType === 'video' ? (
+                            <video src={msg.mediaUrl} controls className="max-w-full h-auto" />
+                        ) : (
+                            <img src={msg.mediaUrl} alt="media" className="max-w-full h-auto object-cover" />
+                        )}
+                    </div>
+                )}
 
+
+                {/* 3. ТЕКСТ (Если есть текст) */}
+                {msg.text && (
+                    <p className="text-sm md:text-base break-words whitespace-pre-wrap">
+                        {msg.text}
+                    </p>
+                )}
+
+                {/* 4. Время и Глазик */}
                 <div className="flex items-center justify-end gap-1 mt-1 min-h-[14px]">
                     <span className="text-[9px] opacity-60 font-medium">
                         {new Date(msg.timestamp?.$date || msg.timestamp || parseInt(msg.id) || Date.now())

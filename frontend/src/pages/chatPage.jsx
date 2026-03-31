@@ -21,6 +21,7 @@ const ChatPage = () => {
 
     const { messages, sendMessage, isConnected, markSeen } = useChat(roomId, username);
 
+
     // Если ника нет (зашли по прямой ссылке) — кидаем на логин
     useEffect(() => {
         const username = sessionStorage.getItem('cat-name');
@@ -111,7 +112,6 @@ const ChatPage = () => {
                     </div>
                 </div>
 
-                {/* Кнопка режима теперь компактнее и не ломает верстку */}
                 <button
                     onClick={handleTogglePurr}
                     className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all whitespace-nowrap ${isPurring ? 'bg-catOrange text-white shadow-md' : 'bg-white/5 text-gray-400'
