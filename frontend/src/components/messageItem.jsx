@@ -17,7 +17,7 @@ export function MessageItem({ msg, isMe, onImageClick }) {
 
                 {/* 2. МЕДИА (Если есть ссылка) */}
                 {msg.mediaUrl && (
-                    <div className="mb-2 rounded-lg overflow-hidden border border-white/10"
+                    <div className="mb-2 rounded-lg overflow-hidden border border-white/10 media-cursor"
                         onClick={() => onImageClick({ url: msg.mediaUrl, type: msg.mediaType })}>
                         {msg.mediaType === 'video' ? (
                             <div className="relative">
@@ -30,7 +30,7 @@ export function MessageItem({ msg, isMe, onImageClick }) {
                                 </div>
                             </div>
                         ) : (
-                            <img src={msg.mediaUrl} alt="media" className="max-w-full h-auto object-cover hover:scale-105 transition-transform cursor-pointer" />
+                            <img src={msg.mediaUrl} alt="media" className="max-w-full h-auto object-cover hover:scale-105 transition-transform" />
                         )}
                     </div>
                 )}
