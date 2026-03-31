@@ -23,12 +23,14 @@ export function MessageItem({ msg, isMe, onImageClick }) {
                             <div className="relative">
                                 <video src={msg.mediaUrl} muted className="max-h-60 w-full object-cover" />
                                 {/* Иконка Play поверх видео */}
-                                <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                                    <span className="text-4xl text-white opacity-80">▶️</span>
+                                <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/40 transition-colors">
+                                    <div className="bg-white/20 p-3 rounded-full backdrop-blur-md border border-white/30 shadow-lg transform group-hover:scale-110 transition-transform">
+                                        <span className="text-2xl text-white drop-shadow-md ml-1">▶️</span>
+                                    </div>
                                 </div>
                             </div>
                         ) : (
-                            <img src={msg.mediaUrl} alt="media" className="max-w-full h-auto object-cover hover:scale-105 transition-transform" />
+                            <img src={msg.mediaUrl} alt="media" className="max-w-full h-auto object-cover hover:scale-105 transition-transform cursor-pointer" />
                         )}
                     </div>
                 )}
