@@ -7,18 +7,21 @@ import MessageInput from '../components/messageInput';
 import { socket } from '../socket.js';
 import { MessageItem } from '../components/messageItem.jsx';
 import { useChat } from '../hooks/useChat.js';
+import { MediaModal } from '../components/mediaModal.jsx';
 
 const ChatPage = () => {
     const { roomId } = useParams();
     const navigate = useNavigate();
-    const { playRandomMeow } = useCatSounds();
+
+    const username = sessionStorage.getItem('cat-name') || 'Анонимный кот';
 
     const [isPurring, setIsPurring] = useState(false);
+    const [selectedMedia, setSelectedMedia] = useState(null);
 
     const lastProcessedMsgId = useRef(null);
-    const username = sessionStorage.getItem('cat-name') || 'Анонимный кот';
     const scrollRef = useRef(null);
 
+    const { playRandomMeow } = useCatSounds();
     const { messages, sendMessage, isConnected, markSeen } = useChat(roomId, username);
 
 
@@ -94,6 +97,7 @@ const ChatPage = () => {
         alert("Ссылка скопирована! Отправь её своей кошечке 🐾");
     };
 
+    const closeMedia = () => setSelectedMedia(null);
 
     return (
         <div className="flex flex-col h-screen max-w-2xl mx-auto bg-catDark text-white shadow-2xl overflow-hidden">
@@ -140,6 +144,7 @@ const ChatPage = () => {
                         key={msg.id || Math.random()}
                         msg={msg}
                         isMe={msg.user === username}
+                        onImageClick={setSelectedMedia}
                     />
                 ))}
             </div>
@@ -149,7 +154,16 @@ const ChatPage = () => {
             <div className="p-4 bg-catDark border-t border-white/5">
                 <MessageInput onSendMessage={sendMessage} />
             </div>
+
+            {/* МОДАЛЬНОЕ ОКНО (Рендерим, если selectedMedia не null) */}
+            {selectedMedia && (
+                <MediaModal
+                    media={selectedMedia}
+                    onClose={closeMedia}
+                />
+            )}
         </div>
+
     );
 };
 

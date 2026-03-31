@@ -1,6 +1,6 @@
 import { CatEye } from './icons/eye2'; // Убедись, что путь верный
 
-export function MessageItem({ msg, isMe }) {
+export function MessageItem({ msg, isMe, onImageClick }) {
     return (
         <div className={`flex w-full mb-4 ${isMe ? 'justify-end' : 'justify-start'}`}>
             <div className={`relative max-w-[70%] p-3 rounded-2xl shadow-lg transition-all duration-300 ${isMe
@@ -17,11 +17,18 @@ export function MessageItem({ msg, isMe }) {
 
                 {/* 2. МЕДИА (Если есть ссылка) */}
                 {msg.mediaUrl && (
-                    <div className="mb-2 rounded-lg overflow-hidden border border-white/10">
+                    <div className="mb-2 rounded-lg overflow-hidden border border-white/10"
+                        onClick={() => onImageClick({ url: msg.mediaUrl, type: msg.mediaType })}>
                         {msg.mediaType === 'video' ? (
-                            <video src={msg.mediaUrl} controls className="max-w-full h-auto" />
+                            <div className="relative">
+                                <video src={msg.mediaUrl} muted className="max-h-60 w-full object-cover" />
+                                {/* Иконка Play поверх видео */}
+                                <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                                    <span className="text-4xl text-white opacity-80">▶️</span>
+                                </div>
+                            </div>
                         ) : (
-                            <img src={msg.mediaUrl} alt="media" className="max-w-full h-auto object-cover" />
+                            <img src={msg.mediaUrl} alt="media" className="max-w-full h-auto object-cover hover:scale-105 transition-transform" />
                         )}
                     </div>
                 )}
