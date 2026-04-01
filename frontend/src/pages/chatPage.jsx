@@ -8,6 +8,7 @@ import { socket } from '../socket.js';
 import { MessageItem } from '../components/messageItem.jsx';
 import { useChat } from '../hooks/useChat.js';
 import { MediaModal } from '../components/mediaModal.jsx';
+import { MediaGallery } from '../components/meiaGallary.jsx';
 
 const ChatPage = () => {
     const { roomId } = useParams();
@@ -17,6 +18,8 @@ const ChatPage = () => {
 
     const [isPurring, setIsPurring] = useState(false);
     const [selectedMedia, setSelectedMedia] = useState(null);
+    const [showGallery, setShowGallery] = useState(false);
+
 
     const lastProcessedMsgId = useRef(null);
     const scrollRef = useRef(null);
@@ -101,7 +104,7 @@ const ChatPage = () => {
 
     return (
         <div className="flex flex-col h-screen max-w-2xl mx-auto bg-catDark text-white shadow-2xl overflow-hidden">
-            {/* Шапка с Живым Глазом */}
+
 
             <header className="flex items-center justify-between p-3 border-b border-white/10 bg-white/5 backdrop-blur-md sticky top-0 z-50">
                 <div className="flex items-center gap-2 overflow-hidden">
@@ -115,7 +118,15 @@ const ChatPage = () => {
                         <p className="text-[9px] text-gray-500 uppercase tracking-tighter">KittyChat </p>
                     </div>
                 </div>
-
+                {/* кнопка галереи */}
+                <button
+                    onClick={() => setShowGallery(true)}
+                    className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                    title="Медиа чата"
+                >
+                    <span className="text-xl">🖼️</span>
+                </button>
+                {/* кнопка мурчания */}
                 <button
                     onClick={handleTogglePurr}
                     className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all whitespace-nowrap ${isPurring ? 'bg-catOrange text-white shadow-md' : 'bg-white/5 text-gray-400'
@@ -135,6 +146,15 @@ const ChatPage = () => {
                     </span>
                 </div>
             </div>
+
+            {/* Галерея медиа */}
+            {showGallery && (
+                <MediaGallery
+                    messages={messages}
+                    onClose={() => setShowGallery(false)}
+                    onSelect={setSelectedMedia} // Используем ту же функцию, что и для клика в чате!
+                />
+            )}
 
 
             {/* Список сообщений */}
