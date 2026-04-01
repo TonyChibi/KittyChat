@@ -5,7 +5,7 @@ export const MediaGallery = ({ messages, onClose, onSelect }) => {
     return (
         <div className="fixed inset-y-0 right-0 w-full sm:w-80 bg-catDark border-l border-white/10 z-[100] shadow-2xl flex flex-col animate-in slide-in-from-right duration-300">
             {/* Шапка галереи */}
-            <div className="sticky top-0 p-4 border-b border-white/10 flex items-center justify-between bg-catDark">
+            <div className="sticky top-0 p-4 border-b border-white/10 flex items-center justify-between bg-[#1a1a1a] z-50 shadow-2xl">
                 <h2 className="font-bold text-catOrange flex items-center gap-2">
                     <span>🐾</span> Медиа чата ({galleryItems.length})
                 </h2>
