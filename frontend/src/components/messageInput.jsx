@@ -49,15 +49,15 @@ const MessageInput = ({ onSendMessage }) => {
     const handleSend = async () => {
         if (!text.trim() && !selectedFile) return;
 
-        const isVideo = file.type.startsWith('video');
-        // 10 МБ для фото, 50 МБ для видео
-        const limit = isVideo ? 50 * 1024 * 1024 : 10 * 1024 * 1024;
+        if (selectedFile) {
+            const isVideo = selectedFile.type.startsWith('video');
+            const limit = isVideo ? 50 * 1024 * 1024 : 10 * 1024 * 1024;
 
-        if (file.size > limit) {
-            alert(`Ого! ${isVideo ? 'Видео' : 'Фото'} слишком тяжелое. Лимит: ${isVideo ? '50' : '10'} МБ 🐾`);
-            return;
+            if (selectedFile.size > limit) {
+                alert(`Ого! ${isVideo ? 'Видео' : 'Фото'} слишком тяжелое. Лимит: ${isVideo ? '50' : '10'} МБ 🐾`);
+                return;
+            }
         }
-
         setIsUploading(true);
         let mediaData = null;
 
