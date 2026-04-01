@@ -20,11 +20,13 @@ const LoginPage = () => {
     }, []);
 
     const deleteRoomFromHistory = (idToDelete) => {
-        // Фильтруем массив: оставляем всё, кроме этого ID
-        const updatedRooms = myRooms.filter(id => id !== idToDelete);
+        // 1. Фильтруем массив объектов, сравнивая id внутри каждого объекта
+        const updatedRooms = myRooms.filter(room => room.id !== idToDelete);
 
-        // Сохраняем обратно в память и обновляем экран
+        // 2. Сохраняем обновленный массив объектов в localStorage
         localStorage.setItem('my-cat-rooms', JSON.stringify(updatedRooms));
+
+        // 3. Обновляем стейт, чтобы список на экране сразу изменился
         setMyRooms(updatedRooms);
     };
 
