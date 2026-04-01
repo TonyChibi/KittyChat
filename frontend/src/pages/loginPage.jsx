@@ -33,8 +33,8 @@ const LoginPage = () => {
 
     const handleJoin = (e) => {
         e.preventDefault();
-        if (username && roomId) {
-            sessionStorage.setItem('cat-name', username);
+        if (username.trim() && roomId.trim()) {
+            sessionStorage.setItem('cat-name', username.trim());
 
             // Проверяем, была ли "отложенная" комната из ссылки
             const pendingRoom = sessionStorage.getItem('pending-room');

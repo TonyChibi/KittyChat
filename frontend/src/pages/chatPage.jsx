@@ -14,7 +14,7 @@ const ChatPage = () => {
     const { roomId } = useParams();
     const navigate = useNavigate();
 
-    const username = sessionStorage.getItem('cat-name') || 'Анонимный кот';
+    const username = sessionStorage.getItem('cat-name') || '';
 
     const [isPurring, setIsPurring] = useState(false);
     const [selectedMedia, setSelectedMedia] = useState(null);
@@ -29,6 +29,20 @@ const ChatPage = () => {
 
 
     // Если ника нет (зашли по прямой ссылке) — кидаем на логин
+    useEffect(() => {
+        const savedName = sessionStorage.getItem('cat-name');
+
+        // Если имени в сессии нет — отправляем котика на логин
+        if (!savedName || !savedName.trim()) {
+            // Запоминаем комнату, чтобы после ввода имени вернуться именно сюда
+            sessionStorage.setItem('pending-room', roomId);
+            navigate('/'); // Или путь к твоему LoginPage
+        }
+    }, [roomId, navigate]);
+
+
+
+
     useEffect(() => {
         if (isConnected && roomId && username) {
             // 1. Достаем список объектов [{id, name}, ...]
@@ -77,8 +91,13 @@ const ChatPage = () => {
         if (messages.length > 0) {
             const lastMsg = messages[messages.length - 1];
 
+            //  Проверяем разницу во времени (в миллисекундах)
+            const messageTime = new Date(lastMsg.timestamp).getTime();
+            const now = Date.now();
+            const isNewMessage = (now - messageTime) < 5000;
+
             // Если это пришло от неё (не от нас)
-            if (lastMsg.user !== username && lastMsg.id !== lastProcessedMsgId.current) {
+            if (lastMsg.user !== username && lastMsg.id !== lastProcessedMsgId.current && isNewMessage) {
 
                 // Запоминаем ID, чтобы не мяукать при смене режима
                 lastProcessedMsgId.current = lastMsg.id;
@@ -86,6 +105,10 @@ const ChatPage = () => {
                 // Вот здесь передаем АКТУАЛЬНЫЙ isPurring
                 playRandomMeow(isPurring);
 
+            } else {
+                // Если это история, просто запоминаем ID последнего сообщения, 
+                // чтобы не мяукать, когда оно станет "последним" в стейте
+                lastProcessedMsgId.current = lastMsg.id;
             }
         }
         // Этот эффект следит и за сообщениями, и за переключателем режима!
