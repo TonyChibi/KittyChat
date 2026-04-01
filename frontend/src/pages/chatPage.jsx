@@ -8,7 +8,7 @@ import { socket } from '../socket.js';
 import { MessageItem } from '../components/messageItem.jsx';
 import { useChat } from '../hooks/useChat.js';
 import { MediaModal } from '../components/mediaModal.jsx';
-import { MediaGallery } from '../components/meiaGallary.jsx';
+import { MediaGallery } from '../components/mediaGallary.jsx';
 
 const ChatPage = () => {
     const { roomId } = useParams();
@@ -30,13 +30,20 @@ const ChatPage = () => {
 
     // Если ника нет (зашли по прямой ссылке) — кидаем на логин
     useEffect(() => {
-        const username = sessionStorage.getItem('cat-name');
-        if (!username) {
-            // Сохраняем ID комнаты, чтобы после ввода ника вернуться именно сюда
-            sessionStorage.setItem('pending-room', roomId);
-            navigate('/');
+        if (isConnected && roomId && username) {
+            // 1. Достаем список объектов [{id, name}, ...]
+            const myRooms = JSON.parse(localStorage.getItem('my-cat-rooms') || '[]');
+
+            // 2. Убираем старую запись об этой комнате (если была), чтобы обновить ник
+            const filteredRooms = myRooms.filter(room => room.id !== roomId);
+
+            // 3. Добавляем свежую запись в начало
+            const updatedRooms = [{ id: roomId, name: username }, ...filteredRooms].slice(0, 5);
+
+            localStorage.setItem('my-cat-rooms', JSON.stringify(updatedRooms));
         }
-    }, [username, navigate, roomId]);
+    }, [isConnected, roomId, username]);
+
 
 
     useEffect(() => {
