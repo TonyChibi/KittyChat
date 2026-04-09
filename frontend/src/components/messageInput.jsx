@@ -157,7 +157,7 @@ const MessageInput = ({ onSendMessage }) => {
 
 
                 <button onClick={handleSend} disabled={isUploading} className="p-3 bg-catOrange rounded-full active:scale-90 transition-all">
-                    {isUploading ? <span className="animate-spin">⌛</span> : <CatPaw size={24} color="white" strokeWidth={3} />}
+                    <CatPaw size={24} color="white" strokeWidth={3} isUploading={isUploading} />
                 </button>
 
             </ div>
