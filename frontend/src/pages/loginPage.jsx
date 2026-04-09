@@ -131,7 +131,7 @@ const LoginPage = () => {
                 )}
 
                 <p className="mt-6 text-xs text-center text-gray-500 uppercase tracking-widest">
-                    Бесплатное PWA для котов
+                    Бесплатные коробки для котов
                 </p>
             </div>
         </div>
