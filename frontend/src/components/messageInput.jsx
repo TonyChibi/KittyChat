@@ -108,7 +108,11 @@ const MessageInput = ({ onSendMessage }) => {
             {/* ПРЕВЬЮ (показывается только если файл выбран) */}
             {preview && (
                 <div className="relative mb-3 w-24 h-24 group">
-                    <img src={preview} className="w-full h-full object-cover rounded-lg border-2 border-catOrange" />
+                    {selectedFile?.type.startsWith('video') ? (
+                        <video src={preview} className="w-full h-full object-cover rounded-lg border-2 border-catOrange" />
+                    ) : (
+                        <img src={preview} className="w-full h-full object-cover rounded-lg border-2 border-catOrange" />
+                    )}
                     <button
                         onClick={() => {
                             setSelectedFile(null);

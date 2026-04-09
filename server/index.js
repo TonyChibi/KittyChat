@@ -12,7 +12,10 @@ const server = http.createServer(app);
 
 
 
-mongoose.connect(process.env.MONGO_URL)
+mongoose.connect(process.env.MONGO_URL, {
+    serverSelectionTimeoutMS: 30000,
+    connectTimeoutMS: 30000,
+})
     .then(() => console.log('🍃 База котов подключена'))
     .catch(err => console.error('Ошибка базы:', err));
 
