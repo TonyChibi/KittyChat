@@ -8,6 +8,8 @@ export const useChat = (roomId, username) => {
     useEffect(() => {
 
 
+
+
         // 1. Сначала вешаем ВСЕ слушатели
         const onHistory = (history) => {
             console.log("📚 История из базы пришла:", history);
@@ -37,6 +39,11 @@ export const useChat = (roomId, username) => {
         socket.on('update_seen', onUpdateSeen);
 
         // 2. И только когда "уши" готовы — заходим в комнату
+        if (socket.connected) {
+            setIsConnected(true);
+            socket.emit('join_room', roomId);
+        }
+
         socket.connect();
 
         socket.on('connect', () => {
@@ -44,6 +51,7 @@ export const useChat = (roomId, username) => {
             console.log("✅ Сокет подключен, запрашиваю комнату:", roomId);
             socket.emit('join_room', roomId);
         });
+
 
         socket.on('disconnect', () => setIsConnected(false));
 

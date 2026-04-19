@@ -1,11 +1,20 @@
 import { io } from "socket.io-client";
 
-// ВНИМАНИЕ: Проверь, что тут именно 4000 (как в сервере)
 const URL = import.meta.env.PROD
     ? "https://kittychat-zh92.onrender.com"
     : "http://localhost:4000";
 
 export const socket = io(URL, {
-    autoConnect: false // Пусть подключается сам при загрузке сайта
-    // transports: ["websocket"] // Принудительно используем вебсокеты
+    // Разрешаем автоматическое подключение
+    autoConnect: true,
+
+    // Настройки для борьбы с "зависанием"
+    reconnection: true,            // Включаем авто-реконнект
+    reconnectionAttempts: Infinity, // Пытаемся подключиться бесконечно
+    reconnectionDelay: 1000,       // Первая попытка через 1 сек
+    reconnectionDelayMax: 5000,    // Максимально ждем 5 сек между попытками
+    timeout: 20000,                // Ждем 20 сек перед тем как считать попытку проваленной
+
+    // Это важно для мобильных браузеров и Onrender (бесплатные тарифы часто капризны к сокетам)
+    transports: ["websocket", "polling"]
 });
