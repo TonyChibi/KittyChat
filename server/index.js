@@ -10,6 +10,19 @@ const mongoose = require('mongoose')
 const app = express();
 const server = http.createServer(app);
 
+// Ответ на главную страницу или специальный путь
+app.get('/', (req, res) => {
+    res.status(200).send('Кот на связи! 🐾');
+});
+
+// errors backings
+process.on('uncaughtException', (err) => {
+    console.error('❌ КРИТИЧЕСКАЯ ОШИБКА (сервер живет):', err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('❌ ОШИБКА В ПРОМИСЕ (сервер живет):', reason);
+});
 
 
 mongoose.connect(process.env.MONGO_URL, {
